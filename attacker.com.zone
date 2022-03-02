@@ -1,0 +1,12 @@
+$TTL 3D
+@	IN      SOA   ns.attacker32.com. admin.attacker32.com. (
+				2008111001
+				8H
+				2H
+				4W
+				1D)
+@       IN      NS    ns.attacker32.com.
+ns      IN      A     10.10.30.6
+@       IN      A     10.10.30.10
+www     IN      A     10.10.30.11
+*       IN      A     10.10.30.12

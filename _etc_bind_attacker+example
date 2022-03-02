@@ -1,0 +1,9 @@
+# add this lines to /etc/bind/named.conf
+zone "attacker32.com" {
+type master;
+file "/etc/bind/attacker.com.zone";
+};
+zone "example.com" {
+type master;
+file "/etc/bind/example.com.zone";
+};
