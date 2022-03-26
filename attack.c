@@ -87,11 +87,6 @@ void send_dns_reply(char *name, char *packet, int pkt_size, unsigned short trans
 	memcpy(packet+64, name, 5);
 	transaction_id=htons(transaction_id);
 	memcpy(packet+28, &transaction_id, 2);
-	unsigned int NSip1 = inet_addr("199.43.135.53");
-	memcpy(packet+12, &NSip1, 4);
-	send_raw_packet(packet, pkt_size);
-	unsigned int NSip2 = inet_addr("199.43.133.53");
-	memcpy(packet+12, &NSip2, 4);
 	send_raw_packet(packet, pkt_size);
 }
 /* Send the raw packet out
