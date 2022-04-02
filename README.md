@@ -26,6 +26,7 @@ On the attacker machine:
 7. Fill missing places in the reply.py, make reply.py executable and execute reply.py
 8. Compile attack.c
 9. Start the compiled file (do not forget start it as sudo)
+<br />
 On the Local_DNS_server is script - check_attacker.sh. This script check every 60 seconds the Local_DNS_ server cache. Start new terminal session and use ssh to remote login in to the Local_DNS_server to start the script so you will be able to see if your attack was succesfull. (password of to the vagrant user: vagrant)
 
 ## Respurces
