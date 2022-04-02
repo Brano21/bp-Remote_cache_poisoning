@@ -16,7 +16,17 @@ If the attack is not successful and the legitimate NS manages to respond, the re
 Dan came up with a very clever idea. Instead of the attacker still asking one question (stuba.sk), he asks another, for example, a.stuba.sk. Most likely, the attacker loses and the local DNS server receives a legitimate response from the real name server. If the name does not exist on the name server, the local DNS server receives a response that the name does not exist and caches this information. So a.stuba.sk will be cached, either with a real IP address or with a record that says that this name does not exist. This is fine because the attacker does not ask the same question again but now sends b.stuba.sk. If the record is also cached, the attacker can continue, c.stuba.sk, d, e, f, etc. It always asks another question, so the answer to it will not be cached. The local DNS server will have to send requests, so the attacker does not have to wait for the cached TTL entry to expire. In this attack, the attacker does not intentionally focus on the answer section. What is important is the authority section. If the attack is successful, the attacker's name server will be cached on the local DNS server as the authority for the domain. At this point, the cache is infected and the domain is hijacked by the attackers
 
 ## Tasks
-
+On the attacker machine:
+1. Go to remote_repo
+2. Copy attacker.com.zone to /etc/bind folder
+3. Copy example.com.zone to /etc/bind folder
+4. Copy content of _etc_bind to /etc/bind/named.conf
+5. Restart bind9 service and chceck if bind9 is running
+6. Fill missing places in the request.py, make request.py executable and execute request.py
+7. Fill missing places in the reply.py, make reply.py executable and execute reply.py
+8. Compile attack.c
+9. Start the compiled file (do not forget start it as sudo)
+On the Local_DNS_server is script - check_attacker.sh. This script check every 60 seconds the Local_DNS_ server cache. Start new terminal session and use ssh to remote login in to the Local_DNS_server to start the script so you will be able to see if your attack was succesfull. (password of to the vagrant user: vagrant)
 
 ## Respurces
 https://seedsecuritylabs.org/Labs_16.04/PDF/DNS_Remote_new.pdf
