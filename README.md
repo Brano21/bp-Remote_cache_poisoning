@@ -38,7 +38,7 @@ On the attacker machine:
 1. Go to remote_repo
 2. Copy attacker.com.zone to /etc/bind folder
 3. Copy example.com.zone to /etc/bind folder
-4. Copy content of _etc_bind to /etc/bind/named.conf
+4. Copy content of _etc_bind_attacker+example to /etc/bind/named.conf
 5. Restart bind9 service and check if bind9 is running
 6. Fill missing places in the request.py, make request.py executable and execute request.py
 7. Fill missing places in the reply.py, make reply.py executable and execute reply.py
