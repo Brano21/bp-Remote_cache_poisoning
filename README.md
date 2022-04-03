@@ -1,6 +1,6 @@
 # bp-Remote_cache_poisoning
 
-Here you can download VMs and the resources you need to run the attack.
+Here you can download VMs and the resources you need to run the remote cache poisoning attack.
 
 ## Introduction
 The objective of this lab is for students to gain first-hand experience on the remote DNS cache poisoning attack, also called the Kaminsky DNS attack. In the topology.png file, you can see that this lab contains 4 virtual machines. First is a router with a 10.10.30.1 IP address, second is a local DNS server (the victim) with a 10.10.30.7 IP address, third is an attacker (you) with 10.10.30.6 and last is a server-wan with 10.10.40.40 IP address. Your job is to poison the cache of the local DNS server with a false reply.
