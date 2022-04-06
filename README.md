@@ -56,7 +56,7 @@ Na útočnom stroji:
     <details>
     <summary>Spoiler!</summary>
     <br />
-        ip = IP(dst='&lt;ip_addr Local_DNS_server&gt;', src='&lt;ip_addr attacker&gt;')
+        ip = IP(dst='&lt;ip_addr Local_DNS_server&gt;', src='&lt;ip_addr attacker&gt;') <br />
         udp = UDP(dport= &lt;DNS&gt; , sport= &lt;any between 1024-65535&gt;, chksum=0)
     <br />
     </details>
@@ -67,10 +67,10 @@ po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. T
     <details>
     <summary>Spoiler!</summary>
     <br />
-        domain = 'example.com' -> pretože na tú útočíte
-        ns = 'ns.attacker32.com' -> NS attacker32, útočníkov   
+        domain = 'example.com' -> pretože na tú útočíte <br />
+        ns = 'ns.attacker32.com' -> NS attacker32, útočníkov  <br /> 
         <br />
-        ip = IP(dst='&lt;ip_addr Local_DNS_server&gt;', src='&lt;ip_addr server-wan&gt;')
+        ip = IP(dst='&lt;ip_addr Local_DNS_server&gt;', src='&lt;ip_addr server-wan&gt;') <br />
         udp = UDP(dport= &lt;33333&gt; , sport= &lt;DNS&gt;, chksum=0)
     <br />
     </details>
