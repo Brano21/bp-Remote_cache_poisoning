@@ -45,12 +45,13 @@ Na útočnom stroji:
     *príkazy napríklad:* <br />
     `cat _etc_bind_attacker+example` -> skopírujte obsah súboru <br />
     `sudo vi /etc/bind/named.conf` -> vložte obsah do tohto súboru
-3. Skopírujte attacker.com.zone do priečinka /etc/bind. Toto je zóna vyhľadávania vpred pre doménu útočník32. Tu je uložené skutočné rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
+3. Skopírujte attacker.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény attacker32.com. Tu je uložené rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
     `sudo cp attacker.com.zone /etc/bind/`
-4. Skopírujte example.com.zone do priečinka /etc/bind. Toto je zóna vyhľadávania dopredu, napríklad doména (falošná). <br />
+4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). <br />
     `sudo cp example.com.zone /etc/bind/`
-5. Reštartujte službu bind9 a skontrolujte, či je spustená funkcia bind9. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
+5. Reštartujte službu bind9 a skontrolujte či je služba bind9 spustená. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
     `sudo service bind9 restart`
+    `sudo service bind9 status` -> ak si ste spravili v3etko dobre status by mal byt *running* <br />
 6. Doplňte chýbajúce miesta v súbore request.py, spravte súbor request.py spustiteľným a spustite súbor request.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta na ktorých sú hviezdičky) a potom <br />
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />
