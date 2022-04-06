@@ -52,7 +52,7 @@ Na útočnom stroji:
 5. Reštartujte službu bind9 a skontrolujte či je služba bind9 spustená. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
     `sudo service bind9 restart` <br />
     `sudo service bind9 status` -> ak si ste spravili všetko dobre status by mal byt *running* <br />
-6. Doplňte chýbajúce miesta v súbore request.py, spravte súbor request.py spustiteľným a spustite súbor request.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta na ktorých sú hviezdičky) a potom <br />
+6. Doplňte chýbajúce miesta v súbore request.py, spravte súbor request.py spustiteľným a spustite súbor request.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta na ktorých sú hviezdičky) 
     <details>
     <summary>Spoiler!</summary>
     <br />
@@ -61,8 +61,7 @@ Na útočnom stroji:
     <br />
     </details>
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
-    `sudo ./request.py` -> spustiť <br />
-po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
+    `sudo ./request.py` -> spustiť <br />a potom po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
 7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami) a potom <br />
     <details>
     <summary>Spoiler!</summary>
@@ -75,8 +74,8 @@ po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. T
     <br />
     </details>
     `sudo chmod +x reply.py` -> urobte ho spustiteľným <br />
-    `sudo ./reply.py` -> spustiť <br />
- po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
+    `sudo ./reply.py` -> spustiť <br /> 
+    po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
 8. Kompilujte útok.c. Ak použijete príkaz uvedený nižšie, zostavený súbor bude mať názov *a.out* <br />
     `sudo gcc attack.c`
 9. Spustite skompilovaný súbor (nezabudnite ho spustiť ako sudo). Je to dôležité, pretože ak ho nespustíte ako sudo, virtuálny stroj nemusí odosielať pakety. <br />
