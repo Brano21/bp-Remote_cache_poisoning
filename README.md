@@ -53,10 +53,27 @@ Na útočnom stroji:
     `sudo service bind9 restart` <br />
     `sudo service bind9 status` -> ak si ste spravili všetko dobre status by mal byt *running* <br />
 6. Doplňte chýbajúce miesta v súbore request.py, spravte súbor request.py spustiteľným a spustite súbor request.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta na ktorých sú hviezdičky) a potom <br />
+    <details>
+    <summary>Spoiler!</summary>
+    <br />
+        ip = IP(dst='&lt;ip_addr Local_DNS_server&gt;', src='&lt;ip_addr attacker&gt;')
+        udp = UDP(dport= &lt;DNS&gt; , sport= &lt;any between 1024-65535&gt;, chksum=0)
+    <br />
+    </details>
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />
 po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
 7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami) a potom <br />
+    <details>
+    <summary>Spoiler!</summary>
+    <br />
+        domain = 'example.com' -> pretože na tú útočíte
+        ns = 'ns.attacker32.com' -> NS attacker32, útočníkov   
+        <br />
+        ip = IP(dst='&lt;ip_addr Local_DNS_server&gt;', src='&lt;ip_addr server-wan&gt;')
+        udp = UDP(dport= &lt;33333&gt; , sport= &lt;DNS&gt;, chksum=0)
+    <br />
+    </details>
     `sudo chmod +x reply.py` -> urobte ho spustiteľným <br />
     `sudo ./reply.py` -> spustiť <br />
  po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
