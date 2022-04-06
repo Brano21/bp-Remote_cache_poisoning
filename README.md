@@ -32,18 +32,36 @@ Now you need to build the last one - Local_DNS_server. Navigate to **vagrant_VMs
 after a while, you should see the Local_DNS_server in the virtual box. For the first time, you turn off this machine and turn it on again. This is important because for the first time this machine does not connect to the network.
 
 ## Tasks
-Firstly you need to start the bash script on the client Local_DNS_server. Open the terminal on Local_DNS_server and run the check_attacker.sh. This script will dump the cache every 60 seconds and check if the attacker NS is in the cache and if the attack was successful.
+Firstly you need to start the bash script on the client Local_DNS_server. Open the terminal on Local_DNS_server and run the check_attacker.sh. <br />
+`./check_attacker.sh` <br />
+This script will dump the cache every 60 seconds and check if the attacker NS is in the cache and if the attack was successful.
 <br /><br />
 On the attacker machine:
-1. Go to remote_repo
-2. Copy attacker.com.zone to /etc/bind folder
-3. Copy example.com.zone to /etc/bind folder
-4. Copy content of _etc_bind_attacker+example to /etc/bind/named.conf
-5. Restart bind9 service and check if bind9 is running
-6. Fill missing places in the request.py, make request.py executable and execute request.py
-7. Fill missing places in the reply.py, make reply.py executable and execute reply.py
-8. Compile attack.c
-9. Start the compiled file (do not forget to start it as sudo)
+1. Go to remote_repo. In this directory are displayed all files and resources which you will need to make this attack successful. <br />
+    `cd remote_repo`
+2. Copy content of _etc_bind_attacker+example to /etc/bind/named.conf. With this you create two zones entries in the DNS server. Both of this zone files will be used for foward lookup (from hostname to IP address).  <br />
+    `cat _etc_bind_attacker+example` -> copy the content of the file  <br />
+    `sudo vi /etc/bind/named.conf` -> paste the content to this file 
+3. Copy attacker.com.zone to /etc/bind folder. This is the foward lookup zone for the attacker32 domain. Here is the actual DNS resolution is stored. Readers who are interested in the syntax of the zone file, can refer to RFC 1035 for details. <br />
+    `sudo cp attacker.com.zone /etc/bind/`
+4. Copy example.com.zone to /etc/bind folder. This si the foward lookup zone for example domain (fake). <br />
+    `sudo cp example.com.zone /etc/bind/`
+5. Restart bind9 service and check if bind9 is running. Every time a modification is made to the DNS configuration, the DNS server needs to be restarted. <br />
+    `sudo service bind9 restart`
+6. Fill missing places in the request.py, make request.py executable and execute request.py. Use your favourite text editor to edit this file (fill places where are asterisks) and then <br />
+    `sudo chmod +x request.py` -> make it executable <br />
+    `sudo ./request.py` -> run <br />
+after running the python script in your folder will appear the new bin file. This bin file will be used by C code to generate fake DNS request (query). <br />
+7. Fill missing places in the reply.py, make reply.py executable and execute reply.py. Use your favourite text editor to edit this file (fill places wher are asterisks) and then <br />
+    `sudo chmod +x reply.py` -> make it executable <br />
+    `sudo ./reply.py` -> run <br />
+ after running the python script in your folder will appear the new bin file. This bin file will be used by C code to generate fake DNS response (reply). <br />
+8. Compile attack.c. If you use the command bellow then the compiled file will be named as *a.out* <br />
+    `sudo gcc attack.c`
+9. Start the compiled file (do not forget to start it as sudo). This is important because if you do not run it as sudo the virtual machine may not send packets out. <br />
+    `sudo ./a.out` <br />
+**Result** <br />
+Now go to the Local_DNS_server machine and watch out the output of the running script which you started in the begining. If you correctly fill the python codes you should see the "The attack was successfull" message and also the attacker32.com NS record.
 
 ## Respurces
 https://seedsecuritylabs.org/Labs_16.04/PDF/DNS_Remote_new.pdf
