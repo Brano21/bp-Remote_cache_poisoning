@@ -1,67 +1,70 @@
 # bp-Remote_cache_poisoning
 
-Here you can download VMs and the resources you need to run the remote cache poisoning attack.
+Tu si môžete stiahnuť virtuálne počítače a prostriedky, ktoré potrebujete na spustenie útoku na otravu vzdialenej vyrovnávacej pamäte.
 
-## Introduction
-The objective of this lab is for students to gain first-hand experience on the remote DNS cache poisoning attack, also called the Kaminsky DNS attack. In the topology.png file, you can see that this lab contains 4 virtual machines. First is a router with a 10.10.30.1 IP address, second is a local DNS server (the victim) with a 10.10.30.7 IP address, third is an attacker (you) with 10.10.30.6 and last is a server-wan with 10.10.40.40 IP address. Your job is to poison the cache of the local DNS server with a false reply.
+## Úvod
+Cieľom tohto labu je, aby študenti nadobudli prvé skúsenosti s útokom na otravu vzdialenej vyrovnávacej pamäte DNS, ktorý sa nazýva aj útok Kaminsky DNS. V súbore topology.png môžete vidieť, že toto laboratórium obsahuje 4 virtuálne stroje. Prvý je router s IP adresou 10.10.30.1, druhý je lokálny DNS server (obeť) s IP adresou 10.10.30.7, tretí je útočník (vy) s 10.10.30.6 a posledný je server-wan s 10.10 .40.40 IP adresa. Vašou úlohou je otráviť vyrovnávaciu pamäť lokálneho servera DNS falošnou odpoveďou.
 
-## How remote cache poisoning works
-In the real world, the attacker and the local DNS server are not in the same network. The attacker, by not listening to the communication, does not know the source IP address, destination port number, and transaction ID. These three pieces of information are critical to an attacker if he wants the attack to be successful. However, two real issues need to be addressed. 
-##### The first issue is timing.
-In a local attack, the attacker knew how to intercept packets, so he knew exactly when the packet was sent. You can't see this attacker in a remote attack. However, this problem can be easily solved. For the attacker to know when to send fake responses, he sends a request to the local DNS server and launches an attack, and floods the local DNS server with fake responses. 
-##### The second issue is the local DNS server cache. 
-If the attack is not successful and the legitimate NS manages to respond, the response is cached. If the attacker continued, the attack would no longer make sense because, in the next attempt, no request will be sent to the NS of the website, but the local DNS server will take the response from its cache. The attacker would therefore have to wait for the TTL to expire for the record to become invalid. In this case, the local DNS server would have to resend the request and the attacker would have the opportunity to perform the attack but again only one attempt. If he failed, he would have to wait for the TTL to expire again, he had one try, and so on. Days may pass until the TTL expires. Therefore, if an attacker always had only one opportunity in a few days, for example, two or three, then the attack itself would have to take decades or hundreds to be successful. For this reason, a remote attack was impractical in practice.
+## Ako funguje vzdialené otrávenie vyrovnávacej pamäte
+V skutočnom svete nie sú útočník a lokálny server DNS v rovnakej sieti. Útočník tým, že nepočúva komunikáciu, nepozná zdrojovú IP adresu, cieľové číslo portu a ID transakcie. Tieto tri informácie sú pre útočníka kritické, ak chce, aby bol útok úspešný. Treba však vyriešiť dva skutočné problémy.
+##### Prvým problémom je načasovanie.
+Pri lokálnom útoku útočník vedel zachytiť pakety, takže presne vedel, kedy bol paket odoslaný. Pri vzdialenom útoku tohto útočníka nevidíte. Tento problém sa však dá ľahko vyriešiť. Aby útočník vedel, kedy má poslať falošné odpovede, odošle požiadavku na lokálny server DNS a spustí útok a zaplaví lokálny server DNS falošnými odpoveďami.
+##### Druhým problémom je vyrovnávacia pamäť lokálneho servera DNS.
+Ak útok nie je úspešný a legitímnemu NS sa podarí odpovedať, odpoveď sa uloží do vyrovnávacej pamäte. Ak by útočník pokračoval, útok by už nemal zmysel, pretože pri ďalšom pokuse sa na NS webu neodošle žiadna požiadavka, ale miestny DNS server prevezme odpoveď zo svojej vyrovnávacej pamäte. Útočník by teda musel čakať na vypršanie platnosti TTL, aby sa záznam stal neplatným. V takom prípade by lokálny server DNS musel požiadavku znova odoslať a útočník by mal možnosť vykonať útok, ale opäť len jeden pokus. Ak by neuspel, musel by znova čakať na vypršanie TTL, mal jeden pokus atď. Do uplynutia platnosti TTL môžu uplynúť dni. Ak by teda útočník mal vždy len jednu príležitosť v priebehu niekoľkých dní, napríklad dva alebo tri, potom by samotný útok musel trvať desaťročia alebo stovky, aby bol úspešný. Z tohto dôvodu bol vzdialený útok v praxi nepraktický.
 
-#### Dan Kaminsky attack 
-Dan came up with a very clever idea. Instead of the attacker still asking one question (stuba.sk), he asks another, for example, a.stuba.sk. Most likely, the attacker loses and the local DNS server receives a legitimate response from the real name server. If the name does not exist on the name server, the local DNS server receives a response that the name does not exist and caches this information. So a.stuba.sk will be cached, either with a real IP address or with a record that says that this name does not exist. This is fine because the attacker does not ask the same question again but now sends b.stuba.sk. If the record is also cached, the attacker can continue, c.stuba.sk, d, e, f, etc. It always asks another question, so the answer to it will not be cached. The local DNS server will have to send requests, so the attacker does not have to wait for the cached TTL entry to expire. In this attack, the attacker does not intentionally focus on the answer section. What is important is the authority section. If the attack is successful, the attacker's name server will be cached on the local DNS server as the authority for the domain. At this point, the cache is infected and the domain is hijacked by the attackers
-## Installation
-Firstly, you need to copy this repository into your computer. After downloading access the folder and navigate to the **muni-kypo_VMs** folder. Run this command: 
+#### Útok Dana Kaminského
+Dan prišiel s veľmi šikovným nápadom. Namiesto toho, aby sa útočník stále opýtal jednu otázku (stuba.sk), položí ďalšiu, napríklad a.stuba.sk. Útočník s najväčšou pravdepodobnosťou prehrá a lokálny DNS server dostane legitímnu odpoveď od skutočného menného servera. Ak názov na serveri názvov neexistuje, lokálny server DNS dostane odpoveď, že názov neexistuje a uloží tieto informácie do medzipamäte. Takže a.stuba.sk bude cachovaná, buď so skutočnou IP adresou alebo so záznamom, ktorý hovorí, že toto meno neexistuje. To je v poriadku, pretože útočník už nepoloží tú istú otázku, ale teraz pošle b.stuba.sk. Ak je záznam aj kešovaný, útočník môže pokračovať, c.stuba.sk, d, e, f, atď. Vždy sa pýta ďalšiu otázku, takže odpoveď na ňu sa neuloží. Lokálny server DNS bude musieť odosielať požiadavky, takže útočník nemusí čakať na vypršanie platnosti záznamu TTL uloženého vo vyrovnávacej pamäti. Pri tomto útoku sa útočník zámerne nezameriava na sekciu odpovedí. Dôležitá je sekcia autority. Ak je útok úspešný, názvový server útočníka sa uloží do vyrovnávacej pamäte na lokálnom serveri DNS ako autorita pre doménu. V tomto bode je vyrovnávacia pamäť infikovaná a doména je napadnutá útočníkmi
+## Inštalácia
+Najprv musíte skopírovať toto úložisko do počítača. Po stiahnutí prejdite do priečinka a prejdite do priečinka **muni-kypo_VMs**. Spustite tento príkaz:
 <br />
 *create-sandbox --provisioning-dir ./provisioning ./remote.yml*
 <br />
-this should create the intermediate sandbox definition. Navigate to the **sandbox** folder and run this command:
+toto by malo vytvoriť prechodnú definíciu karantény. Prejdite do priečinka **sandbox** a spustite tento príkaz:
 <br />
-*manage-sandbox build*
+*spravovať vytvorenie karantény*
 <br />
-after a while, three virtual machines will be displayed in the virtual box - router, server-lan and attacker.
+po chvíli sa vo virtuálnom boxe zobrazia tri virtuálne stroje - router, server-lan a útočník.
 <br />
-Now you need to build the last one - Local_DNS_server. Navigate to **vagrant_VMs/client** folder which is located in your downloaded folder. Run this command:
+Teraz musíte zostaviť posledný - Local_DNS_server. Prejdite do priečinka **vagrant_VMs/client**, ktorý sa nachádza v stiahnutom priečinku. Spustite tento príkaz:
 <br />
-*vagrant up*
+*tulák hore*
 <br />
-after a while, you should see the Local_DNS_server in the virtual box. For the first time, you turn off this machine and turn it on again. This is important because for the first time this machine does not connect to the network.
+po chvíli by ste mali vo virtuálnom boxe vidieť Local_DNS_server. Prvýkrát tento stroj vypnete a znova zapnete. Je to dôležité, pretože toto zariadenie sa prvýkrát nepripojí k sieti.
 
-## Tasks
-Firstly you need to start the bash script on the client Local_DNS_server. Open the terminal on Local_DNS_server and run the check_attacker.sh. <br />
+## Úlohy
+Najprv musíte spustiť bash skript na klientovi Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite check_attacker.sh. <br />
 `./check_attacker.sh` <br />
-This script will dump the cache every 60 seconds and check if the attacker NS is in the cache and if the attack was successful.
+Tento skript vypíše vyrovnávaciu pamäť každých 60 sekúnd a skontroluje či je útočník NS vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
+**Pozor** <br />
+Po 15 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť!
 <br /><br />
-On the attacker machine:
-1. Go to remote_repo. In this directory are displayed all files and resources which you will need to make this attack successful. <br />
+Na útočnom stroji:
+1. Prejdite do adresára remote_repo. V tomto adresári sú zobrazené všetky súbory a prostriedky, ktoré budete potrebovať na to aby bol útok úspešný. <br />
     `cd remote_repo`
-2. Copy content of _etc_bind_attacker+example to /etc/bind/named.conf. With this you create two zones entries in the DNS server. Both of this zone files will be used for foward lookup (from hostname to IP address).  <br />
-    `cat _etc_bind_attacker+example` -> copy the content of the file  <br />
-    `sudo vi /etc/bind/named.conf` -> paste the content to this file 
-3. Copy attacker.com.zone to /etc/bind folder. This is the foward lookup zone for the attacker32 domain. Here is the actual DNS resolution is stored. Readers who are interested in the syntax of the zone file, can refer to RFC 1035 for details. <br />
+2. Skopírujte obsah _etc_bind_attacker+example do /etc/bind/named.conf. Týmto vytvoríte dve zóny na serveri DNS. Oba tieto súbory zóny sa použijú na iteratívne vyhľadávanie (názvu hostiteľa na IP adresu). <br />
+    *príkazy napríklad:* <br />
+    `cat _etc_bind_attacker+example` -> skopírujte obsah súboru <br />
+    `sudo vi /etc/bind/named.conf` -> vložte obsah do tohto súboru
+3. Skopírujte attacker.com.zone do priečinka /etc/bind. Toto je zóna vyhľadávania vpred pre doménu útočník32. Tu je uložené skutočné rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
     `sudo cp attacker.com.zone /etc/bind/`
-4. Copy example.com.zone to /etc/bind folder. This si the foward lookup zone for example domain (fake). <br />
+4. Skopírujte example.com.zone do priečinka /etc/bind. Toto je zóna vyhľadávania dopredu, napríklad doména (falošná). <br />
     `sudo cp example.com.zone /etc/bind/`
-5. Restart bind9 service and check if bind9 is running. Every time a modification is made to the DNS configuration, the DNS server needs to be restarted. <br />
+5. Reštartujte službu bind9 a skontrolujte, či je spustená funkcia bind9. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
     `sudo service bind9 restart`
-6. Fill missing places in the request.py, make request.py executable and execute request.py. Use your favourite text editor to edit this file (fill places where are asterisks) and then <br />
-    `sudo chmod +x request.py` -> make it executable <br />
-    `sudo ./request.py` -> run <br />
-after running the python script in your folder will appear the new bin file. This bin file will be used by C code to generate fake DNS request (query). <br />
-7. Fill missing places in the reply.py, make reply.py executable and execute reply.py. Use your favourite text editor to edit this file (fill places wher are asterisks) and then <br />
-    `sudo chmod +x reply.py` -> make it executable <br />
-    `sudo ./reply.py` -> run <br />
- after running the python script in your folder will appear the new bin file. This bin file will be used by C code to generate fake DNS response (reply). <br />
-8. Compile attack.c. If you use the command bellow then the compiled file will be named as *a.out* <br />
+6. Doplňte chýbajúce miesta v súbore request.py, spravte súbor request.py spustiteľným a spustite súbor request.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta na ktorých sú hviezdičky) a potom <br />
+    `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
+    `sudo ./request.py` -> spustiť <br />
+po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
+7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami) a potom <br />
+    `sudo chmod +x reply.py` -> urobte ho spustiteľným <br />
+    `sudo ./reply.py` -> spustiť <br />
+ po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
+8. Kompilujte útok.c. Ak použijete príkaz uvedený nižšie, zostavený súbor bude mať názov *a.out* <br />
     `sudo gcc attack.c`
-9. Start the compiled file (do not forget to start it as sudo). This is important because if you do not run it as sudo the virtual machine may not send packets out. <br />
+9. Spustite skompilovaný súbor (nezabudnite ho spustiť ako sudo). Je to dôležité, pretože ak ho nespustíte ako sudo, virtuálny stroj nemusí odosielať pakety. <br />
     `sudo ./a.out` <br />
-**Result** <br />
-Now go to the Local_DNS_server machine and watch out the output of the running script which you started in the begining. If you correctly fill the python codes you should see the "The attack was successfull" message and also the attacker32.com NS record.
+**Výsledok** <br />
+Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak správne vyplníte python kódy, mali by ste vidieť správu "Útok bol úspešný" a tiež záznam NS útočník32.com.
 
-## Respurces
+## Zdroje
 https://seedsecuritylabs.org/Labs_16.04/PDF/DNS_Remote_new.pdf
