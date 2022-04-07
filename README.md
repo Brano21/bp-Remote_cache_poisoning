@@ -1,35 +1,35 @@
 # bp-Remote_cache_poisoning
 
-Tu si môžete stiahnuť virtuálne počítače a prostriedky, ktoré potrebujete na spustenie útoku na otravu vzdialenej vyrovnávacej pamäte.
+Tu si môžete stiahnuť virtuálne počítače a prostriedky, ktoré potrebujete na spustenie vzdialeného útoku na otravu vyrovnávacej pamäte.
 
 ## Úvod
-Cieľom tohto labu je, aby študenti nadobudli prvé skúsenosti s útokom na otravu vzdialenej vyrovnávacej pamäte DNS, ktorý sa nazýva aj útok Kaminsky DNS. V súbore topology.png môžete vidieť, že toto laboratórium obsahuje 4 virtuálne stroje. Prvý je router s IP adresou 10.10.30.1, druhý je lokálny DNS server (obeť) s IP adresou 10.10.30.7, tretí je útočník (vy) s 10.10.30.6 a posledný je server-wan s 10.10 .40.40 IP adresa. Vašou úlohou je otráviť vyrovnávaciu pamäť lokálneho servera DNS falošnou odpoveďou.
+Cieľom tohto labu je, aby študenti nadobudli prvé skúsenosti s útokom na otravu vzdialenej vyrovnávacej pamäte DNS, ktorý sa nazýva aj útok Dana Kaminského. V súbore topology.png môžete vidieť, že toto laboratórium obsahuje 4 virtuálne stroje. Prvý je router s IP adresou 10.10.30.1, druhý je lokálny DNS server (obeť) s IP adresou 10.10.30.7, tretí je útočník (vy) s 10.10.30.6 a posledný je server-wan s 10.10 .40.40 IP adresa. Vašou úlohou je otráviť vyrovnávaciu pamäť lokálneho DNS servera za pomoci falošnej odpovede.
 
 ## Ako funguje vzdialené otrávenie vyrovnávacej pamäte
-V skutočnom svete nie sú útočník a lokálny server DNS v rovnakej sieti. Útočník tým, že nepočúva komunikáciu, nepozná zdrojovú IP adresu, cieľové číslo portu a ID transakcie. Tieto tri informácie sú pre útočníka kritické, ak chce, aby bol útok úspešný. Treba však vyriešiť dva skutočné problémy.
+V skutočnom svete nie sú útočník a lokálny server DNS v rovnakej sieti. Útočník tým, že nepočúva komunikáciu, nepozná zdrojovú IP adresu, cieľové číslo portu a ID transakcie. Tieto tri informácie sú pre útočníka kritické, ak chce, aby bol útok úspešný. Treba však vyriešiť dva skutočné problémy. V tomto labe je len pre jednoduchosť útočník a lokálny DNS server. Hráč nemá povolené použiť metódy na odchytávanie premávky a následne použitie týchto informácií na vykonanie tohto cvičenia.
 ##### Prvým problémom je načasovanie.
-Pri lokálnom útoku útočník vedel zachytiť pakety, takže presne vedel, kedy bol paket odoslaný. Pri vzdialenom útoku tohto útočníka nevidíte. Tento problém sa však dá ľahko vyriešiť. Aby útočník vedel, kedy má poslať falošné odpovede, odošle požiadavku na lokálny server DNS a spustí útok a zaplaví lokálny server DNS falošnými odpoveďami.
+Pri lokálnom útoku útočník vedel zachytiť pakety, takže presne vedel, kedy bol paket odoslaný. Pri vzdialenom útoku tohto útočníka nevidíte. Tento problém sa však dá ľahko vyriešiť. Aby útočník vedel, kedy má poslať falošné odpovede, odošle požiadavku na lokálny DNS server a spustí útok a zaplaví lokálny server DNS falošnými odpoveďami.
 ##### Druhým problémom je vyrovnávacia pamäť lokálneho servera DNS.
-Ak útok nie je úspešný a legitímnemu mennému serveru (ďalej len NS - name server) sa podarí odpovedať, odpoveď sa uloží do vyrovnávacej pamäte. Ak by útočník pokračoval, útok by už nemal zmysel, pretože pri ďalšom pokuse sa na NS webu neodošle žiadna požiadavka, ale miestny DNS server prevezme odpoveď zo svojej vyrovnávacej pamäte. Útočník by teda musel čakať na vypršanie platnosti TTL, aby sa záznam stal neplatným. V takom prípade by lokálny server DNS musel požiadavku znova odoslať a útočník by mal možnosť vykonať útok, ale opäť len jeden pokus. Ak by neuspel, musel by znova čakať na vypršanie TTL, mal jeden pokus atď. Do uplynutia platnosti TTL môžu uplynúť dni. Ak by teda útočník mal vždy len jednu príležitosť v priebehu niekoľkých dní, napríklad dva alebo tri, potom by samotný útok musel trvať desaťročia alebo stovky, aby bol úspešný. Z tohto dôvodu bol vzdialený útok v praxi nepraktický.
+Ak útok nie je úspešný a legitímnemu mennému serveru (ďalej len NS - name server) sa podarí odpovedať, odpoveď sa uloží do vyrovnávacej pamäte. Ak by útočník pokračoval, útok by už nemal zmysel, pretože pri ďalšom pokuse sa na NS neodošle žiadna požiadavka, ale miestny DNS server prevezme odpoveď zo svojej vyrovnávacej pamäte. Útočník by teda musel čakať na vypršanie platnosti TTL, aby sa záznam stal neplatným. V takom prípade by lokálny DNS server musel požiadavku znova odoslať a útočník by mal možnosť vykonať útok, ale opäť len jeden pokus. Ak by neuspel, musel by znova čakať na vypršanie TTL a po vypršaní mal znova len jeden pokus. Do uplynutia platnosti TTL môžu uplynúť dni. Ak by teda útočník mal vždy len jednu príležitosť v priebehu niekoľkých dní (napr. dva alebo tri) potom by samotný útok musel trvať desaťročia alebo stovky, aby bol úspešný. Z tohto dôvodu bol vzdialený útok v praxi nepraktický.
 
 #### Útok Dana Kaminského
-Dan prišiel s veľmi šikovným nápadom. Namiesto toho, aby sa útočník stále opýtal jednu otázku (stuba.sk), položí ďalšiu, napríklad a.stuba.sk. Útočník s najväčšou pravdepodobnosťou prehrá a lokálny DNS server dostane legitímnu odpoveď od skutočného menného servera. Ak názov na serveri názvov neexistuje, lokálny server DNS dostane odpoveď, že názov neexistuje a uloží tieto informácie do medzipamäte. Takže a.stuba.sk bude cachovaná, buď so skutočnou IP adresou alebo so záznamom, ktorý hovorí, že toto meno neexistuje. To je v poriadku, pretože útočník už nepoloží tú istú otázku, ale teraz pošle b.stuba.sk. Ak je záznam aj kešovaný, útočník môže pokračovať, c.stuba.sk, d, e, f, atď. Vždy sa pýta ďalšiu otázku, takže odpoveď na ňu sa neuloží. Lokálny server DNS bude musieť odosielať požiadavky, takže útočník nemusí čakať na vypršanie platnosti záznamu TTL uloženého vo vyrovnávacej pamäti. Pri tomto útoku sa útočník zámerne nezameriava na sekciu odpovedí. Dôležitá je sekcia autority. Ak je útok úspešný, názvový server útočníka sa uloží do vyrovnávacej pamäte na lokálnom serveri DNS ako autorita pre doménu. V tomto bode je vyrovnávacia pamäť infikovaná a doména je napadnutá útočníkmi
+Dan prišiel s veľmi šikovným nápadom. Namiesto toho, aby sa útočník stále opýtal jednu otázku (stuba.sk), položí ďalšiu, napríklad a.stuba.sk. Útočník s najväčšou pravdepodobnosťou prehrá a lokálny DNS server dostane legitímnu odpoveď od skutočného menného servera. Ak názov na serveri názvov neexistuje, lokálny server DNS dostane odpoveď, že názov neexistuje a uloží tieto informácie do vyrovnávacej pamäte. Takže a.stuba.sk bude cachovaná, buď so skutočnou IP adresou alebo so záznamom, ktorý hovorí, že toto meno neexistuje. To je v poriadku, pretože útočník už nepoloží tú istú otázku, ale teraz pošle b.stuba.sk. Ak je záznam aj kešovaný, útočník môže pokračovať, c.stuba.sk, d, e, f, atď. Vždy sa pýta ďalšiu otázku, takže odpoveď na ňu nenachádza vo vyronávacej pamäti. Lokálny DNS server bude musieť odosielať požiadavky, takže útočník nemusí čakať na vypršanie platnosti záznamu TTL uloženého vo vyrovnávacej pamäti. Pri tomto útoku sa útočník zámerne nezameriava na sekciu odpovedí. Dôležitá je sekcia autority. Ak je útok úspešný, menn7 server útočníka sa uloží do vyrovnávacej pamäte na lokálnom DNS serveri ako autorita pre doménu. V tomto bode je vyrovnávacia pamäť infikovaná a doména je napadnutá útočníkom.
 ## Inštalácia
-Najprv musíte skopírovať toto úložisko do počítača. Po stiahnutí prejdite do priečinka a prejdite do priečinka **muni-kypo_VMs**. Spustite tento príkaz:
+Najprv musíte skopírovať toto úložisko do počítača. Po stiahnutí prejdite do priečinka kde ste si tento repozitár stiahli a prejdite do priečinka **muni-kypo_VMs**. Spustite tento príkaz:
 <br />
 *create-sandbox --provisioning-dir ./provisioning ./remote.yml*
 <br />
-toto by malo vytvoriť prechodnú definíciu karantény. Prejdite do priečinka **sandbox** a spustite tento príkaz:
+toto by malo vytvoriť prechodnú definíciu sandboxu. Prejdite do priečinka **sandbox** a spustite tento príkaz:
 <br />
-*spravovať vytvorenie karantény*
+*manage-sandbox build*
 <br />
-po chvíli sa vo virtuálnom boxe zobrazia tri virtuálne stroje - router, server-lan a útočník.
+po chvíli sa vo virtual boxe zobrazia tri virtuálne stroje - router, server-lan a útočník.
 <br />
 Teraz musíte zostaviť posledný - Local_DNS_server. Prejdite do priečinka **vagrant_VMs/client**, ktorý sa nachádza v stiahnutom priečinku. Spustite tento príkaz:
 <br />
-*tulák hore*
+*vagrant up*
 <br />
-po chvíli by ste mali vo virtuálnom boxe vidieť Local_DNS_server. Prvýkrát tento stroj vypnete a znova zapnete. Je to dôležité, pretože toto zariadenie sa prvýkrát nepripojí k sieti.
+po chvíli by ste mali vo virtuálnom boxe vidieť Local_DNS_server. Prvýkrát tento stroj vypnete a znova zapnete. Je to dôležité, pretože toto zariadenie sa na prvýkrát nepripojí k sieti.
 
 ## Úlohy
 Najprv musíte spustiť bash skript na klientovi Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite check_attacker.sh. <br />
