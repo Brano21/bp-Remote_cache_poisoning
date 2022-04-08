@@ -36,9 +36,9 @@ po chvíli by ste mali vo virtuálnom boxe vidieť Local_DNS_server. Prvýkrát 
 ## Úlohy
 Najprv musíte spustiť bash skript na klientovi Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite check_attacker.sh. <br />
 `./check_attacker.sh` <br />
-Tento skript vypíše vyrovnávaciu pamäť každých 60 sekúnd a skontroluje či je útočníkov menný server vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
+Tento skript vypíše vyrovnávaciu pamäť Lokálneho DNS servera každých 60 sekúnd a skontroluje či je útočníkov menný server vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
 **Pozor** <br />
-Po 15 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť!
+Po 15 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť! Vy (útočník) máte teda len necelých 15 minút kým si administrátor serveru všimne chybu v konfigurácii a zablokuje vašu IP adresu čo bude mať za následok že útoku už nebude následne možné uskutočniť. 
 <br /><br />
 Na útočnom stroji:
 1. Prejdite do adresára remote_repo. V tomto adresári sú zobrazené všetky súbory a prostriedky, ktoré budete potrebovať na to aby bol útok úspešný. <br />
@@ -49,7 +49,7 @@ Na útočnom stroji:
     `sudo vi /etc/bind/named.conf` -> vložte obsah do tohto súboru
 3. Skopírujte attacker.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény attacker32.com. Tu je uložené rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
     `sudo cp attacker.com.zone /etc/bind/`
-4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). <br />
+4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). Bol vyvorený pre vás (útočníka) a má za následok že keď bude vyrovnávacia pamäť Lokálneho DNS servera otrávená tak s ním budete vedieť komunikovať - odpovedať mu na jeho dopyty. <br />
     `sudo cp example.com.zone /etc/bind/`
 5. Reštartujte službu bind9 a skontrolujte či je služba bind9 spustená. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
     `sudo service bind9 restart` <br />
@@ -64,7 +64,7 @@ Na útočnom stroji:
     </details>
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />a potom po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
-7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami) a potom <br />
+7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - Lokálny DNS server posiela DNS popyty a teda ich aj prijíma na porte 33333) a potom <br />
     <details>
     <summary>Spoiler!</summary>
     <br />
@@ -78,7 +78,8 @@ Na útočnom stroji:
     `sudo chmod +x reply.py` -> urobte ho spustiteľným <br />
     `sudo ./reply.py` -> spustiť <br /> 
     po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
-8. Kompilujte útok.c. Ak použijete príkaz uvedený nižšie, zostavený súbor bude mať názov *a.out* <br />
+8. Kompilujte útok.c. Ak použijete príkaz uvedený nižšie, zostavený súbor bude mať názov *a.out*. Tento kód funguje nasledovne: <br />
+   Použije request.bin na vygenerovanie dopytu v ktorom náhodne vymieňa prvých 5 písmen v názve (kvôli tomu aby sme sa nepýtali stále tú jednu otázku) na ktorú útočník následne odpovie 50krát, používa reply.bin, pričom pre každú z 50 odpovedí generuje náhodné TransactionID. <br />
     `sudo gcc attack.c`
 9. Spustite skompilovaný súbor (nezabudnite ho spustiť ako sudo). Je to dôležité, pretože ak ho nespustíte ako sudo, virtuálny stroj nemusí odosielať pakety. <br />
     `sudo ./a.out` <br />
