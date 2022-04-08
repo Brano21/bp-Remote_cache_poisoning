@@ -84,7 +84,7 @@ Na útočnom stroji:
 9. Spustite skompilovaný súbor (nezabudnite ho spustiť ako sudo). Je to dôležité, pretože ak ho nespustíte ako sudo, virtuálny stroj nemusí odosielať pakety. <br />
     `sudo ./a.out` <br />
 **Výsledok** <br />
-Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com.
+Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com. Následne po prejdení 15 minútach od spustení hry servera môžete skontrolovať obranu. Mali by ste už len stále dostávať správu "Ak nevidíte výsledok, útok ešte nebol úspešný".
 
 ## Zdroje
 https://seedsecuritylabs.org/Labs_16.04/PDF/DNS_Remote_new.pdf
