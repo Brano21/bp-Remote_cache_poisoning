@@ -3,7 +3,7 @@
 Tu si môžete stiahnuť virtuálne počítače a prostriedky, ktoré potrebujete na spustenie vzdialeného útoku na otravu vyrovnávacej pamäte.
 
 ## Úvod
-Cieľom tohto labu je, aby študenti nadobudli prvé skúsenosti s útokom na otravu vzdialenej vyrovnávacej pamäte DNS, ktorý sa nazýva aj útok Dana Kaminského. V súbore topology.png môžete vidieť, že toto laboratórium obsahuje 4 virtuálne stroje. Prvý je router s IP adresou 10.10.30.1, druhý je lokálny DNS server (obeť) s IP adresou 10.10.30.7, tretí je útočník (vy) s 10.10.30.6 a posledný je server-wan s 10.10 .40.40 IP adresa. Vašou úlohou je otráviť vyrovnávaciu pamäť lokálneho DNS servera za pomoci falošnej odpovede.
+Cieľom tohto labu je, aby študenti nadobudli prvé skúsenosti s útokom na otravu vzdialenej vyrovnávacej pamäte DNS, ktorý sa nazýva aj útok Dana Kaminského. V súbore topology.png môžete vidieť, že toto laboratórium obsahuje 4 virtuálne stroje. Prvý je router s IP adresou 10.10.30.1, druhý je lokálny DNS server (obeť) s IP adresou 10.10.30.7, tretí je útočník (vy) s 10.10.30.6 a posledný je server-wan s 10.10.40.40 IP adresa. Vašou úlohou je otráviť vyrovnávaciu pamäť lokálneho DNS servera za pomoci falošnej odpovede.
 
 ## Ako funguje vzdialené otrávenie vyrovnávacej pamäte
 V skutočnom svete nie sú útočník a lokálny server DNS v rovnakej sieti. Útočník tým, že nepočúva komunikáciu, nepozná zdrojovú IP adresu, cieľové číslo portu a ID transakcie. Tieto tri informácie sú pre útočníka kritické, ak chce, aby bol útok úspešný. Treba však vyriešiť dva skutočné problémy.  <br />
@@ -27,7 +27,7 @@ toto by malo vytvoriť prechodnú definíciu sandboxu. Prejdite do priečinka **
 <br />
 po chvíli sa vo virtual boxe zobrazia tri virtuálne stroje - router, server-lan a útočník.
 <br />
-Teraz musíte vytvoriť posledný - Local_DNS_server. Prejdite do priečinka **vagrant_VMs/client**, ktorý sa nachádza v stiahnutom priečinku. Spustite tento príkaz:
+Teraz musíte vytvoriť posledný - Local_DNS_server. Prejdite do priečinka **vagrant_VMs/server**, ktorý sa nachádza v stiahnutom priečinku. Spustite tento príkaz:
 <br />
 *vagrant up*
 <br />
@@ -52,8 +52,8 @@ Na útočnom stroji:
 4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). Bol vyvorený pre vás (útočníka) a má za následok že keď bude vyrovnávacia pamäť Lokálneho DNS servera otrávená tak s ním budete vedieť komunikovať - odpovedať mu na jeho dopyty. <br />
     `sudo cp example.com.zone /etc/bind/`
 5. Reštartujte službu bind9 a skontrolujte či je služba bind9 spustená. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
-    `sudo service bind9 restart` <br />
-    `sudo service bind9 status` -> ak si ste spravili všetko dobre status by mal byt *running* <br />
+    `sudo systemctl restart named` <br />
+    `sudo systemctl status named` -> ak si ste spravili všetko dobre status by mal byt *running* <br />
 6. Doplňte chýbajúce miesta v súbore request.py, spravte súbor request.py spustiteľným a spustite súbor request.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta na ktorých sú hviezdičky) 
     <details>
     <summary>Spoiler!</summary>
@@ -64,7 +64,7 @@ Na útočnom stroji:
     </details>
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />a potom po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
-7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - Lokálny DNS server posiela DNS popyty a teda ich aj prijíma na porte 33333) a potom <br />
+7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - Lokálny DNS server posiela DNS popyty a teda ich aj prijíma na porte 33333, *domain* značí doménu na ktorú útočíte, *ns* je útočníkov menný server - pozri attacker.com.zone pre správne doplnenie ns) a potom <br />
     <details>
     <summary>Spoiler!</summary>
     <br />
