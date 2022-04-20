@@ -38,7 +38,7 @@ Najprv musíte spustiť bash skript na klientovi Local_DNS_server. Otvorte termi
 `./check_attacker.sh` <br />
 Tento skript vypíše vyrovnávaciu pamäť Lokálneho DNS servera každých 60 sekúnd a skontroluje či je útočníkov menný server vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
 **Pozor** <br />
-Po 15 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť! Vy (útočník) máte teda len necelých 15 minút kým si administrátor serveru všimne chybu v konfigurácii a zablokuje vašu IP adresu čo bude mať za následok že útoku už nebude následne možné uskutočniť. 
+Po 30 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť! Vy (útočník) máte teda len necelých 30 minút kým si administrátor serveru všimne chybu v konfigurácii a zablokuje vašu IP adresu čo bude mať za následok že útoku už nebude následne možné uskutočniť. 
 <br /><br />
 Na útočnom stroji:
 1. Prejdite do adresára remote_repo. V tomto adresári sú zobrazené všetky súbory a prostriedky, ktoré budete potrebovať na to aby bol útok úspešný. <br />
@@ -85,7 +85,7 @@ Na útočnom stroji:
     `sudo ./a.out` <br />
 
 **Výsledok** <br />
-Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com. Následne po prejdení 15 minútach od spustení hry servera môžete skontrolovať obranu. Mali by ste už len stále dostávať správu "Ak nevidíte výsledok, útok ešte nebol úspešný".
+Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com. Následne po prejdení 30 minútach od spustení hry servera môžete skontrolovať obranu. Mali by ste už len stále dostávať správu "Ak nevidíte výsledok, útok ešte nebol úspešný".
 
 ## Zdroje
 https://seedsecuritylabs.org/Labs_16.04/PDF/DNS_Remote_new.pdf
