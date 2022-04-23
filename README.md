@@ -62,6 +62,7 @@ Na útočnom stroji:
         udp = UDP(dport= &lt;DNS&gt; , sport= &lt;any between 1024-65535&gt;, chksum=0)
     <br />
     </details>
+    
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />a potom po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
 7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - Lokálny DNS server posiela DNS popyty a teda ich aj prijíma na porte 33333, *domain* značí doménu na ktorú útočíte, *ns* je útočníkov menný server - pozri attacker.com.zone pre správne doplnenie ns) a potom <br />
@@ -75,6 +76,7 @@ Na útočnom stroji:
         udp = UDP(dport= &lt;33333&gt; , sport= &lt;DNS&gt;, chksum=0)
     <br />
     </details>
+    
     `sudo chmod +x reply.py` -> urobte ho spustiteľným <br />
     `sudo ./reply.py` -> spustiť <br /> 
     po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
