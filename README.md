@@ -11,13 +11,17 @@ V skutočnom svete nie sú útočník a lokálny server DNS v rovnakej sieti. Ú
 *Poznámka:* <br />
 V tomto labe je len pre jednoduchosť útočník a lokálny DNS server. Hráč nemá povolené použiť metódy na odchytávanie premávky a následne použitie týchto informácií na vykonanie tohto cvičenia.
 ##### Prvým problémom je načasovanie
-Pri lokálnom útoku útočník vie odpočúvať komunikáciu a zachytávať pakety, takže presne vie kedy bol paket odoslaný. Pri vzdialenom útoku takúto mpžnosť útočník nemá. Tento problém sa však dá ľahko vyriešiť. Aby útočník vedel, kedy má poslať falošné odpovede, on sám odošle požiadavku na lokálny DNS server a spustí útok ktorým zaplaví lokálny DNS server falošnými odpoveďami.
+Pri lokálnom útoku útočník vie odpočúvať komunikáciu a zachytávať pakety, takže presne vie kedy bol paket odoslaný. Pri vzdialenom útoku takúto možnosť útočník nemá. Tento problém sa však dá ľahko vyriešiť. Aby útočník vedel, kedy má poslať falošné odpovede, on sám odošle požiadavku na lokálny DNS server a spustí útok ktorým zaplaví lokálny DNS server falošnými odpoveďami.
 ##### Druhým problémom je vyrovnávacia pamäť lokálneho servera DNS
 Ak útok nie je úspešný a legitímnemu mennému serveru sa podarí odpovedať, odpoveď sa uloží do vyrovnávacej pamäte. Ak by útočník pokračoval tak daný útok by už nemal zmysel pretože v ďalšom pokuse sa už nevyšle žiadny dopyt na menný server ale lokálny DNS server zoberie odpoveď zo svojej vyrovnávacej pamäte. Útočník by musel teda počkať kým vyprší TTL aby sa daný záznam stal neplatným. V takom prípade by lokálny DNS server musel odoslať znova požiadavku a útočník by mal príležitosť na vykonanie útoku ale opäť len jeden pokus. Ak by sa to nepodarilo musel by opäť čakať na vypršanie TTL, mal jeden pokus a takto stále dookola. Kým vyprší TTL môžu prejsť aj dni. Preto ak by mal útočník vždy len jednu príležitosť za niekoľko dni, napríklad dva či tri, tak samotný útok na to aby prebehol úspešne by musel trvať desiatky či stovky rokov. Z tohto dôvodu bol vzdialený útok v praxi nerealizovateľný 
 
 #### Útok Dana Kaminského
 Dan Kaminsky prišiel s veľmi šikovným nápadom. Namiesto toho, aby sa útočník stále opýtal jednu otázku (napr. stuba.sk), opýta sa inú, napríklad a.stuba.sk. S najväčšou pravdepodobnosťou útočník prehrá a lokálny DNS server dostane legitímnu odpoveď zo skutočného menného servera. Ak meno na mennom servery neexistuje, lokálny DNS server dostane odpoveď že meno neexistuje a uloží si túto informáciu do vyrovnávacej pamäte. Takže a.stuba.sk bude uložená do vyrovnávacej pamäte, či už so skutočnou IP adresou alebo so záznamom, ktorý hovorí že toto meno neexistuje. To je v poriadku pretože útočník sa neopýta znova tú istú otázku ale teraz odošle b.stuba.sk. Ak sa aj ten záznam uloží do vyrovnávacej pamäte útočník stále môže pokračovať, c.stuba.sk, d, e, f atď. Vždy sa opýta inú otázku čiže odpoveď na ňu nebude uložená vo vyrovnávacej pamäti. Lokálny DNS server bude musieť odosielať požiadavky a útočník teda nemusí čakať kým by záznamu vo vyrovnávacej pamäti vypršal TTL. Pri tomto útoku sa útočník zámerne nezameriava na sekciu odpovedí. Dôležitá je sekcia autority. Ak je útok úspešný, menný server útočníka sa uloží do vyrovnávacej pamäte na lokálnom DNS serveri ako autorita pre doménu. V tomto bode je vyrovnávacia pamäť infikovaná a doména je napadnutá útočníkom.
 ![Dan Kaminsky útok](./Dan-Kaminsky_utok.png)
+
+## Inštalácia CSC
+Ak si chce používateľ zahrať túto hru je potrebné si nainštalovať prostredie sandboxu a nastaviť softvér. Táto inštalácia je opísaná na stránke od kolegov z Masarykovej univerzity v Brne https://gitlab.ics.muni.cz/muni-kypo-csc/cyber-sandbox-creator/-/wikis/3.0/Installation - časť Chcem spustiť CSC sandbox.
+
 ## Inštalácia
 Najprv musíte skopírovať toto úložisko do počítača. Po stiahnutí prejdite do priečinka kde ste si tento repozitár stiahli a prejdite do priečinka **muni-kypo_VMs**. Spustite tento príkaz:
 <br />
@@ -51,7 +55,7 @@ Na útočnom stroji:
     `sudo vi /etc/bind/named.conf` -> vložte obsah do tohto súboru
 3. Skopírujte attacker.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény attacker32.com. Tu je uložené rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
     `sudo cp attacker.com.zone /etc/bind/`
-4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). Bol vyvorený pre vás (útočníka) a má za následok že keď bude vyrovnávacia pamäť Lokálneho DNS servera otrávená tak s ním budete vedieť komunikovať - odpovedať mu na jeho dopyty. <br />
+4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). Bol vytvorený pre vás (útočníka) a má za následok že keď bude vyrovnávacia pamäť Lokálneho DNS servera otrávená tak s ním budete vedieť komunikovať - odpovedať mu na jeho dopyty. <br />
     `sudo cp example.com.zone /etc/bind/`
 5. Reštartujte službu bind9 a skontrolujte či je služba bind9 spustená. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
     `sudo systemctl restart named` <br />
@@ -82,7 +86,7 @@ Na útočnom stroji:
     `sudo chmod +x reply.py` -> urobte ho spustiteľným <br />
     `sudo ./reply.py` -> spustiť <br /> 
     po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS odpovede. <br />
-8. Kompilujte útok.c. Ak použijete príkaz uvedený nižšie, zostavený súbor bude mať názov *a.out*. Tento kód funguje nasledovne: <br />
+8. Kompilujte attack.c. Ak použijete príkaz uvedený nižšie, zostavený súbor bude mať názov *a.out*. Tento kód funguje nasledovne: <br />
    Použije request.bin na vygenerovanie dopytu v ktorom náhodne vymieňa prvých 5 písmen v názve (kvôli tomu aby sme sa nepýtali stále tú jednu otázku) na ktorú útočník následne odpovie 50krát, používa reply.bin, pričom pre každú z 50 odpovedí generuje náhodné TransactionID. <br />
     `sudo gcc attack.c`
 9. Spustite skompilovaný súbor (nezabudnite ho spustiť ako sudo). Je to dôležité, pretože ak ho nespustíte ako sudo, virtuálny stroj nemusí odosielať pakety. <br />
