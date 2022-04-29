@@ -47,15 +47,16 @@ Tento skript vypíše vyrovnávaciu pamäť Lokálneho DNS servera každých 60 
 Po 30 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť! Vy (útočník) máte teda len necelých 30 minút kým si administrátor serveru všimne chybu v konfigurácii a zablokuje vašu IP adresu čo bude mať za následok že útoku už nebude následne možné uskutočniť. 
 <br /><br />
 Na útočnom stroji:
+Prihlasovacie údaje sú kali:kali. 
 1. Prejdite do adresára remote_repo. V tomto adresári sú zobrazené všetky súbory a prostriedky, ktoré budete potrebovať na to aby bol útok úspešný. <br />
     `cd remote_repo`
 2. Skopírujte obsah _etc_bind_attacker+example do /etc/bind/named.conf. Týmto vytvoríte dve zóny na serveri DNS. Oba tieto súbory zóny sa použijú na iteratívne vyhľadávanie (názvu hostiteľa na IP adresu). <br />
     *príkazy napríklad:* <br />
     `cat _etc_bind_attacker+example` -> skopírujte obsah súboru <br />
     `sudo vi /etc/bind/named.conf` -> vložte obsah do tohto súboru
-3. Skopírujte attacker.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény attacker32.com. Tu je uložené rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
+3. Skopírujte attacker.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívne vyhľadávanie domény attacker32.com. Tu je uložené rozlíšenie DNS. Čitatelia, ktorí sa zaujímajú o syntax súboru zóny, si môžu pozrieť podrobnosti v RFC 1035. <br />
     `sudo cp attacker.com.zone /etc/bind/`
-4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívny vyhľadávanie domény example.com (samozrejme tento záznam je falošný). Bol vytvorený pre vás (útočníka) a má za následok že keď bude vyrovnávacia pamäť Lokálneho DNS servera otrávená tak s ním budete vedieť komunikovať - odpovedať mu na jeho dopyty. <br />
+4. Skopírujte example.com.zone do priečinka /etc/bind. Tento záznam slúži pre iteratívne vyhľadávanie domény example.com (samozrejme tento záznam je falošný). Bol vytvorený pre vás (útočníka) a má za následok že keď bude vyrovnávacia pamäť Lokálneho DNS servera otrávená tak s ním budete vedieť komunikovať - odpovedať mu na jeho dopyty. <br />
     `sudo cp example.com.zone /etc/bind/`
 5. Reštartujte službu bind9 a skontrolujte či je služba bind9 spustená. Pri každej zmene konfigurácie DNS je potrebné reštartovať server DNS. <br />
     `sudo systemctl restart named` <br />
@@ -71,7 +72,7 @@ Na útočnom stroji:
     
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />a potom po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
-7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - Lokálny DNS server posiela DNS popyty a teda ich aj prijíma na porte 33333, *domain* značí doménu na ktorú útočíte, *ns* je útočníkov menný server - pozri attacker.com.zone pre správne doplnenie ns) a potom <br />
+7. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - Lokálny DNS server posiela DNS dopyty a teda ich aj prijíma na porte 33333, *domain* značí doménu na ktorú útočíte (obrázok), *ns* je útočníkov menný server - pozri attacker.com.zone pre správne doplnenie ns) a potom <br />
     <details>
     <summary>Spoiler!</summary>
     <br />
