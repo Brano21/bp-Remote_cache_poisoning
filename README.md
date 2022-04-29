@@ -17,7 +17,7 @@ Ak útok nie je úspešný a legitímnemu mennému serveru sa podarí odpovedať
 
 #### Útok Dana Kaminského
 Dan Kaminsky prišiel s veľmi šikovným nápadom. Namiesto toho, aby sa útočník stále opýtal jednu otázku (napr. stuba.sk), opýta sa inú, napríklad a.stuba.sk. S najväčšou pravdepodobnosťou útočník prehrá a lokálny DNS server dostane legitímnu odpoveď zo skutočného menného servera. Ak meno na mennom servery neexistuje, lokálny DNS server dostane odpoveď že meno neexistuje a uloží si túto informáciu do vyrovnávacej pamäte. Takže a.stuba.sk bude uložená do vyrovnávacej pamäte, či už so skutočnou IP adresou alebo so záznamom, ktorý hovorí že toto meno neexistuje. To je v poriadku pretože útočník sa neopýta znova tú istú otázku ale teraz odošle b.stuba.sk. Ak sa aj ten záznam uloží do vyrovnávacej pamäte útočník stále môže pokračovať, c.stuba.sk, d, e, f atď. Vždy sa opýta inú otázku čiže odpoveď na ňu nebude uložená vo vyrovnávacej pamäti. Lokálny DNS server bude musieť odosielať požiadavky a útočník teda nemusí čakať kým by záznamu vo vyrovnávacej pamäti vypršal TTL. Pri tomto útoku sa útočník zámerne nezameriava na sekciu odpovedí. Dôležitá je sekcia autority. Ak je útok úspešný, menný server útočníka sa uloží do vyrovnávacej pamäte na lokálnom DNS serveri ako autorita pre doménu. V tomto bode je vyrovnávacia pamäť infikovaná a doména je napadnutá útočníkom.
-![Dan Kaminsky útok](./Dan-Kaminsky_utok.png)
+
 
 ## Inštalácia CSC
 Ak si chce používateľ zahrať túto hru je potrebné si nainštalovať prostredie sandboxu a nastaviť softvér. Táto inštalácia je opísaná na stránke od kolegov z Masarykovej univerzity v Brne https://gitlab.ics.muni.cz/muni-kypo-csc/cyber-sandbox-creator/-/wikis/3.0/Installation - časť Chcem spustiť CSC sandbox.
