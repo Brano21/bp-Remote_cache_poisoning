@@ -2,8 +2,8 @@
 from scapy.all import *
 
 name = 'aaaaa.example.com'
-domain = 'example.com'
-ns = 'ns.attacker32.com'
+domain = '**********'
+ns = '**********'
 Qdsec = DNSQR(qname=name)
 Anssec = DNSRR(rrname=name, type='A', rdata='1.2.1.2', ttl=259200)
 NSsec = DNSRR(rrname=domain, type='NS', rdata=ns, ttl=259200)
