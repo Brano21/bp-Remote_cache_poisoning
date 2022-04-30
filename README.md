@@ -40,7 +40,7 @@ Teraz musíte vytvoriť posledný - Local_DNS_server. Prejdite do priečinka **v
 po chvíli by ste mali vo virtuálnom boxe vidieť Local_DNS_server. Prvýkrát tento stroj vypnete a znova zapnete. Je to dôležité, pretože toto zariadenie sa na prvýkrát nepripojí k sieti.
 
 ## Úlohy
-Najprv musíte spustiť bash skript na klientovi Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite check_attacker.sh. <br />
+Najprv musíte spustiť bash skript na Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite check_attacker.sh. <br />
 `./check_attacker.sh` <br />
 Tento skript vypíše vyrovnávaciu pamäť Lokálneho DNS servera každých 60 sekúnd a skontroluje či je útočníkov menný server vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
 **Pozor** <br />
