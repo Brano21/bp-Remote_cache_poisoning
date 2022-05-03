@@ -45,7 +45,7 @@ Najprv musíte spustiť bash skript na Local_DNS_server. Otvorte terminál na Lo
 Tento skript vypíše vyrovnávaciu pamäť Lokálneho DNS servera každých 60 sekúnd a skontroluje či je útočníkov menný server vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
 **Pozor** <br />
 Po 30 minútach sa obnovia pravidlá firewallu a daný útok už nebude možné uskutočniť! Vy (útočník) máte teda len necelých 30 minút kým si administrátor serveru všimne chybu v konfigurácii a zablokuje vašu IP adresu čo bude mať za následok že útoku už nebude následne možné uskutočniť. 
-*Poznámka:* Ak sa vám nepodarí vykonať útok v stanovenom čase bude potrebné daný virtuáln stroj opäť vrátiť do pôvodného - "zraniteľného" stavu. Klientovu VM bude preto potrebné zničiť a nanovo vybuildovať. **
+*Poznámka:* Ak sa vám nepodarí vykonať útok v stanovenom čase bude potrebné daný virtuáln stroj opäť vrátiť do pôvodného - "zraniteľného" stavu. Lokálny DNS server VM bude preto potrebné zničiť a nanovo vybuildovať. **
 <br /><br />
 Na útočnom stroji: <br />
 Prihlasovacie údaje sú kali:kali.
@@ -113,7 +113,7 @@ Teraz ste vytvorili falošný DNS dopyt. Ten sa odošle na lokálny DNS server. 
 Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com. Následne po prejdení 30 minútach od spustení hry servera môžete skontrolovať obranu. Mali by ste už len stále dostávať správu "Ak nevidíte výsledok, útok ešte nebol úspešný".
 
 **
-Stretnete sa s problémom kedy vám vagrant bude vypisovať že daný názov virtuálky už vo VB existuje, preto bude potrebné vymazať daný súbor v priečinku VB a až potom bude možné opätovne vybudovať klientovu VM príkazom - *vagrant up*.    
+Stretnete sa s problémom kedy vám vagrant bude vypisovať že daný názov virtuálky už vo VB existuje, preto bude potrebné vymazať daný súbor v priečinku VB a až potom bude možné opätovne vybudovať lokálny DNS server VM príkazom - *vagrant up*.    
 
 ## Zdroje
 https://seedsecuritylabs.org/Labs_16.04/PDF/DNS_Remote_new.pdf
