@@ -86,7 +86,7 @@ Prihlasovacie údaje sú kali:kali.
     `sudo chmod +x request.py` -> urobte ho spustiteľným <br />
     `sudo ./request.py` -> spustiť <br />a potom po spustení skriptu python vo vašom priečinku sa zobrazí nový súbor bin. Tento súbor bin bude použitý kódom C na generovanie falošnej DNS požiadavky (dotazu). <br />
 
-Teraz ste vytvorili falošný DNS dopyt. Ten sa odošle na lokálny DNS server. Lokálny DNS server však nebude vedieť na tento dopyt odpovedať, preto vytvorí dopyt kde bude požadovať odpoveď na vašu otázku. Tento dopyt sa následne odošle na server-wan - autoritatívny menný server pre doménu example.com. Vašou úlohou bude v ďalšom kroku vytvoriť falošnú odpoveď na dopyt lokálneho DNS servera. 
+Teraz ste vytvorili falošný DNS dopyt. Ten sa odošle na lokálny DNS server. Lokálny DNS server však s najväčšou pravdepodobnosťou nebude vedieť na tento dopyt odpovedať, preto vytvorí dopyt kde bude požadovať odpoveď na vašu otázku. Tento dopyt sa následne odošle na server-wan - autoritatívny menný server pre doménu example.com. Vašou úlohou bude v ďalšom kroku vytvoriť falošnú odpoveď na dopyt lokálneho DNS servera. 
     
 9. Doplňte chýbajúce miesta v súbore reply.py, nastavte súbor reply.py na spustiteľný a spustite súbor reply.py. Na úpravu tohto súboru použite svoj obľúbený textový editor (vyplňte miesta označené hviezdičkami - nastavenia lokálneho DNS servera som upravil tak aby DNS dopyty posielal a teda aj prijímal na porte 33333, *domain* značí doménu na ktorú útočíte, *ns* je útočníkov menný server - pozri attacker.com.zone pre správne doplnenie NS) a potom <br />
     <details>
