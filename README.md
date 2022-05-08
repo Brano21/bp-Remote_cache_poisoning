@@ -55,12 +55,9 @@ Prihlasovacie údaje sú kali:kali.
     <details>
     <summary>Spoiler!</summary>
     <br />
-        `sudo nmap -sn <your_IP_addr/range>`
+        `sudo nmap -sn &lt;your_IP_addr/range&gt;`
     <br />
     </details>
-    
-    ! *POZNÁMKA: Lokálny DNS server sa nachádza v rovnakej sieti ako aj tvoj (útočníkov) počítač.*
-
 3. Prejdite do adresára remote_repo. V tomto adresári sú zobrazené všetky súbory a prostriedky, ktoré budete potrebovať na to aby bol útok úspešný. <br />
     `cd remote_repo`
 4. Skopírujte obsah _etc_bind_attacker+example do /etc/bind/named.conf. Týmto vytvoríte dve zóny na serveri DNS. Oba tieto súbory zóny sa použijú na iteratívne vyhľadávanie (názvu hostiteľa na IP adresu). <br />
