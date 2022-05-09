@@ -40,7 +40,10 @@ Teraz musíte vytvoriť posledný - Local_DNS_server. Prejdite do priečinka **v
 po chvíli by ste mali vo virtuálnom boxe vidieť Local_DNS_server. Prvýkrát tento stroj vypnete a znova zapnete. Je to dôležité, pretože toto zariadenie sa na prvýkrát nepripojí k sieti.
 
 ## Úlohy
-Najprv musíte spustiť bash skript na Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite check_attacker.sh. <br />
+Najprv musíte spustiť dva bash skripty na Local_DNS_server. Otvorte terminál na Local_DNS_server a spustite prvý z nich - start.sh. <br />
+`./start.sh` <br />
+Tento skript je potrebné zapnúť na to aby sa spustil časovač a následne sa upravili pravidlá firewallu. <br />
+Následne si zapnite nové terminálové okno a spustite druhý - check_attacker.sh <br />
 `./check_attacker.sh` <br />
 Tento skript vypíše vyrovnávaciu pamäť Lokálneho DNS servera každých 60 sekúnd a skontroluje či je útočníkov menný server vo vyrovnávacej pamäti a teda či bol samotný útok úspešný. <br /> 
 **Pozor** <br />
@@ -107,7 +110,7 @@ Teraz ste vytvorili falošný DNS dopyt. Ten sa odošle na lokálny DNS server. 
     `sudo ./a.out` <br />
 
 **Výsledok** <br />
-Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu, ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com. Následne po prejdení 30 minútach od spustení hry servera môžete skontrolovať obranu. Mali by ste už len stále dostávať správu "Ak nevidíte výsledok, útok ešte nebol úspešný".
+Teraz prejdite na stroj Local_DNS_server a sledujte výstup spusteného skriptu (check_attacker.sh), ktorý ste spustili na začiatku. Ak ste správne doplnili python kódy a spustili C kód, mali by ste vidieť správu "Útok bol úspešný" a taktiež aj záznam NS attacker32.com. Následne po prejdení 30 minútach od spustení hry sa server reštartuje. Následne môžete skontrolovať obranu pomocou zapnutia skriptu check_attacker.sh. Mali by ste už len stále dostávať správu "Ak nevidíte výsledok, útok ešte nebol úspešný".
 
 **
 Stretnete sa s problémom kedy vám vagrant bude vypisovať že daný názov virtuálky už vo VB existuje, preto bude potrebné vymazať daný súbor v priečinku VB a až potom bude možné opätovne vybudovať lokálny DNS server VM príkazom - *vagrant up*.    
